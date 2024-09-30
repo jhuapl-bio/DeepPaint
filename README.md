@@ -85,3 +85,27 @@ python -m deep_paint.utils.embeddings --config /path/to/your_config.yaml
 ~~~
 
 This config file looks slightly different than the config file used for the four main commands. Refer to the [configs](./results/configs/) directory for examples.
+
+## Results
+
+### Overview
+
+The [results](./results/) directory contains the following subdirectories:
+- `checkpoints`: Contains model checkpoints
+- `configs`: Contains configuration files used for training, getting model predictions, and getting model embeddings
+- `embeddings`: Contains embeddings extracted from the model on the test set of the `RxRx2` data
+- `logs`: Contains csv files extracted from `tensorboard` logs
+- `metadata`: Contains custom metadata used for training the `DenseNet` model
+- `predictions`: Contains model predictions on the test set of the `RxRx2` data
+
+### Data Availability
+
+The [`RxRx2`](https://www.rxrx.ai/rxrx2) dataset was used for training and evaluation of the `DenseNet` model. The dataset is freely available to download from the [`RxRx.ai`](https://www.rxrx.ai/) website.
+
+### Model Weights
+
+The [checkpoints](./results/checkpoints) directory contains model checkpoints for the binary and multiclass `DenseNet` model. These checkpoints can be used to load the trained models and make predictions.
+
+### Notebooks
+
+The [notebooks](./notebooks/) directory contains Jupyter notebooks that demonstrate the performance of the `DenseNet` model on the `RxRx2` dataset. The notebooks contain visualizations of the model predictions and embeddings.
