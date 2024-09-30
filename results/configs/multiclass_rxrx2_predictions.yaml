@@ -1,0 +1,57 @@
+ckpt_path: /path/to/deep-paint/results/models/multiclass_rxrx2.ckpt # update path to the multiclass model
+model:
+  class_path: deep_paint.lightning.DeepLightningModule
+  init_args:
+    num_classes: 3
+data:
+  class_path: deep_paint.lightning.DeepLightningDataModule
+  init_args:
+    data_dir: /path/to/rxrx2 # update path to the rxrx2 dataset
+    metadata_path: /path/to/rxrx2_multiclass.csv # update path to the multiclass metadata
+    image_ext: .png
+    path_col: directory
+    label_col: label
+    stratify_col: label
+    group_col: null
+    channels: true
+    channel_map:
+      DNA: _w1
+      ER: _w2
+      Actin: _w3
+      RNA: _w4
+      Mitochondria: _w5
+      Golgi: _w6
+    sizes: [0.7, 0.15, 0.15]
+    predict_metadata: test
+    test_transforms:
+      class_path: torchvision.transforms.Compose
+      init_args:
+        transforms:
+          - class_path: torchvision.transforms.ToTensor
+          - class_path: torchvision.transforms.Normalize
+            init_args:
+              mean: [0.0140, 0.0617, 0.0316, 0.0348, 0.0072, 0.0444]
+              std: [0.0237, 0.0550, 0.0150, 0.0287, 0.0068, 0.0250]
+    batch_size: 16
+    num_workers: 16 # update to equal the number of CPU cores
+    seed: 42
+trainer:
+  accelerator: gpu
+  devices: 1
+  deterministic: true
+  logger:
+    class_path: lightning.pytorch.loggers.TensorBoardLogger
+    init_args:
+      save_dir: /path/to/save_dir # update path to your save directory
+      name: logs
+  callbacks:
+    - class_path: deep_paint.lightning.PlotConfusionMatrix
+      init_args:
+        plot_every_n_epochs: 1
+        backend: matplotlib
+        label_col: label
+        class_col: class
+        save: false
+    - class_path: lightning.pytorch.callbacks.RichModelSummary
+      init_args:
+        max_depth: 2
