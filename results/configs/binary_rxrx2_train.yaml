@@ -1,0 +1,110 @@
+model:
+  class_path: deep_paint.lightning.DeepLightningModule
+  init_args:
+    backbone: densenet161
+    weights: null
+    num_classes: 2
+    num_channels: 6
+    loss:
+      class_path: CrossEntropyLoss
+      init_args:
+        reduction: mean
+optimizer:
+  class_path: torch.optim.SGD
+  init_args:
+    lr: 1.E-2
+    momentum: 0.9
+    nesterov: true
+    weight_decay: 1.E-4
+lr_scheduler:
+  class_path: lightning.pytorch.cli.ReduceLROnPlateau
+  init_args:
+    monitor: loss/val
+    factor: 0.1
+    patience: 10
+data:
+  class_path: deep_paint.lightning.DeepLightningDataModule
+  init_args:
+    data_dir: /path/to/rxrx2 # update path to the rxrx2 dataset
+    metadata_path: /path/to/rxrx2_binary.csv # update path to the binary metadata
+    image_ext: .png
+    path_col: directory
+    label_col: label
+    stratify_col: label
+    group_col: null
+    channels: true
+    channel_map:
+      DNA: _w1
+      ER: _w2
+      Actin: _w3
+      RNA: _w4
+      Mitochondria: _w5
+      Golgi: _w6
+    sizes: [0.7, 0.15, 0.15]
+    train_transforms:
+      class_path: torchvision.transforms.Compose
+      init_args:
+        transforms:
+          - class_path: torchvision.transforms.ToTensor
+          - class_path: torchvision.transforms.RandomResizedCrop
+            init_args:
+              size: 512
+              antialias: true
+          - class_path: torchvision.transforms.RandomRotation
+            init_args:
+              degrees: 90
+          - class_path: torchvision.transforms.RandomHorizontalFlip
+          - class_path: torchvision.transforms.RandomVerticalFlip
+          - class_path: torchvision.transforms.Normalize
+            init_args:
+              mean: [0.0140, 0.0617, 0.0316, 0.0348, 0.0072, 0.0444]
+              std: [0.0237, 0.0550, 0.0150, 0.0287, 0.0068, 0.0250]
+    test_transforms:
+      class_path: torchvision.transforms.Compose
+      init_args:
+        transforms:
+          - class_path: torchvision.transforms.ToTensor
+          - class_path: torchvision.transforms.Normalize
+            init_args:
+              mean: [0.0140, 0.0617, 0.0316, 0.0348, 0.0072, 0.0444]
+              std: [0.0237, 0.0550, 0.0150, 0.0287, 0.0068, 0.0250]
+    batch_size: 16
+    num_workers: 16 # update to equal the number of CPU cores
+    seed: 42
+    sampling: oversample
+trainer:
+  accelerator: gpu
+  devices: 1
+  max_epochs: 100
+  deterministic: true
+  logger:
+    class_path: lightning.pytorch.loggers.TensorBoardLogger
+    init_args:
+      save_dir: /path/to/save_dir # update path to your save directory
+      name: logs
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+      init_args:
+        monitor: loss/val
+        mode: min
+        save_top_k: 3
+        save_last: true
+        filename: "{epoch:02d}_{step:06d}"
+        verbose: true
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: epoch
+    - class_path: deep_paint.lightning.PlotConfusionMatrix
+      init_args:
+        plot_every_n_epochs: 1
+        backend: matplotlib
+        label_col: label
+        class_col: class
+        save: false
+    - class_path: lightning.pytorch.callbacks.RichModelSummary
+      init_args:
+        max_depth: 2
+    - class_path: lightning.pytorch.callbacks.StochasticWeightAveraging
+      init_args:
+        swa_lrs: 1.E-8
+        swa_epoch_start: 75

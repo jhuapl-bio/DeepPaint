@@ -1,0 +1,42 @@
+treatment,class
+Activin-B,Growth factor
+B-ECGF,Growth factor
+CsAT,Toxin
+DTx,Toxin
+IFNB-1,Cytokine
+IL-1-alpha,Cytokine
+IL-1-beta,Cytokine
+IL-13,Cytokine
+IL-4,Cytokine
+IL-6-R,Cytokine
+Lymphotoxin-a2,Cytokine
+Nigericin,Toxin
+OSM,Cytokine
+PTx,Toxin
+PaExtA,Toxin
+STx1,Toxin
+STx2,Toxin
+TCdiffA,Toxin
+TCdiffB,Toxin
+TGF-B2,Growth factor
+TNF-alpha,Cytokine
+TNF-beta,Cytokine
+IFN-omega,Cytokine
+Activin-A,Growth factor
+BMP-10,Growth factor
+BMP-6,Growth factor
+BMP-9,Growth factor
+BaPALF,Toxin
+IFN-alpha-A,Cytokine
+IFN-gamma,Cytokine
+IL-33,Cytokine
+LIF,Cytokine
+LTa1b2,Cytokine
+VEGF-165,Growth factor
+VEGFC,Growth factor
+CT-1,Cytokine
+LPS_EK,Toxin
+Poly_IC_HMW,Viral
+Poly_IC_LMW,Viral
+PVR,NA
+EMPTY,Untreated

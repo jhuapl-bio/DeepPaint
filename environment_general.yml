@@ -1,0 +1,35 @@
+name: deep-paint
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - bitsandbytes
+  - ca-certificates
+  - certifi
+  - fire
+  - hydra-core
+  - jupyter
+  - lightning
+  - matplotlib
+  - natsort
+  - omegaconf
+  - openssl
+  - pandas
+  - plotly
+  - python=3.11
+  - pytorch
+  - pytorch-cuda=12.1
+  - pyyaml
+  - rich
+  - scikit-learn
+  - seaborn
+  - tensorboard
+  - tensorboardx
+  - torchmetrics
+  - torchvision
+  - pip:
+      - docstring-parser
+      - jsonargparse
+      - kaleido
+      - typeshed-client
